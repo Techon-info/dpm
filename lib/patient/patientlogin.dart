@@ -52,7 +52,7 @@ class _PatientLoginScreenState extends State<PatientLoginScreen> {
       await _clearOldSessions();
 
       // Create new session
-      await account.createEmailSession(
+      await account.createEmailPasswordSession(
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -195,17 +195,16 @@ class _PatientLoginScreenState extends State<PatientLoginScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child:
-                    _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
+                      ),
               ),
             ),
 

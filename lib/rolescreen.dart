@@ -4,18 +4,6 @@ import 'package:flutter/material.dart';
 import 'doctor/doctorlogin.dart';
 import 'patient/patientlogin.dart';
 
-class Rolescreen extends StatelessWidget {
-  const Rolescreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Roleselectionscreen(),
-    );
-  }
-}
-
 class Roleselectionscreen extends StatefulWidget {
   const Roleselectionscreen({super.key});
 
@@ -87,12 +75,10 @@ class _RoleselectionscreenState extends State<Roleselectionscreen> {
             SizedBox(height: sh * 0.04),
             ElevatedButton(
               onPressed: selectedrole.isNotEmpty ? _navigateToNextScreen : null,
-
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    selectedrole.isNotEmpty
-                        ? Colors.blue
-                        : Colors.grey.shade300,
+                backgroundColor: selectedrole.isNotEmpty
+                    ? Colors.blue
+                    : Colors.grey.shade300,
                 padding: EdgeInsets.symmetric(vertical: 22, horizontal: 100),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -156,7 +142,6 @@ class RoleCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 20),
-
             Expanded(
               child: Column(
                 children: [

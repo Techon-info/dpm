@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:image_picker/image_picker.dart';
 
 class AppwriteService {
   final Client client = Client();
@@ -81,7 +80,8 @@ class AppwriteService {
   // User Login
   Future<models.Session?> loginUser(String email, String password) async {
     try {
-      return await account.createEmailSession(email: email, password: password);
+      return await account.createEmailPasswordSession(
+          email: email, password: password);
     } catch (e) {
       print("Login failed: $e");
       return null;
@@ -91,9 +91,8 @@ class AppwriteService {
   // Get User Data from Database
   Future<models.Document?> getUserData(String userId, String role) async {
     try {
-      String collectionId = (role == "doctors")
-          ? '67ded414000a1664b9d3'
-          : '67ded40100179828ab8e';
+      String collectionId =
+          (role == "doctors") ? '67ded414000a1664b9d3' : '67ded40100179828ab8e';
 
       return await databases.getDocument(
         databaseId: '67ded3f80005c55371f9',

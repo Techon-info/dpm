@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dpm/services/appwrite_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../services/appwrite_service.dart';
 import 'rolescreen.dart';
 
 void main() {
@@ -16,14 +15,14 @@ class Dpm extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Rolescreen(),
+      home: Roleselectionscreen(),
     );
   }
 }
 
 class LoginScreen extends StatefulWidget {
   final String role;
-  LoginScreen({required this.role});
+  const LoginScreen({super.key, required this.role});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -36,7 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String? userId;
 
   void _login() async {
-    final session = await _appwriteService.login(_emailController.text, _passwordController.text);
+    final session = await _appwriteService.login(
+      _emailController.text,
+      _passwordController.text,
+    );
     if (session != null) {
       final user = await _appwriteService.getCurrentUser();
       setState(() {
@@ -47,7 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => UploadScreen(userId: userId!)),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login failed')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login failed')));
     }
   }
 
@@ -59,8 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: _emailController, decoration: InputDecoration(labelText: 'Email')),
-            TextField(controller: _passwordController, decoration: InputDecoration(labelText: 'Password'), obscureText: true),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
             SizedBox(height: 20),
             ElevatedButton(onPressed: _login, child: Text('Login')),
           ],
@@ -72,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 class UploadScreen extends StatefulWidget {
   final String userId;
-  UploadScreen({required this.userId});
+  const UploadScreen({super.key, required this.userId});
 
   @override
   _UploadScreenState createState() => _UploadScreenState();
@@ -83,7 +94,9 @@ class _UploadScreenState extends State<UploadScreen> {
   File? _image;
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
@@ -93,11 +106,18 @@ class _UploadScreenState extends State<UploadScreen> {
 
   Future<void> _uploadImage() async {
     if (_image != null) {
-      final fileId = await _appwriteService.uploadWoundImage(_image!, widget.userId);
+      final fileId = await _appwriteService.uploadWoundImage(
+        _image!,
+        widget.userId,
+      );
       if (fileId != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Image uploaded successfully')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Image uploaded successfully')));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Upload failed')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Upload failed')));
       }
     }
   }
@@ -116,7 +136,10 @@ class _UploadScreenState extends State<UploadScreen> {
           _image == null ? Text('No image selected') : Image.file(_image!),
           ElevatedButton(onPressed: _pickImage, child: Text('Pick Image')),
           ElevatedButton(onPressed: _uploadImage, child: Text('Upload Image')),
-          ElevatedButton(onPressed: _fetchImages, child: Text('Fetch My Images')),
+          ElevatedButton(
+            onPressed: _fetchImages,
+            child: Text('Fetch My Images'),
+          ),
         ],
       ),
     );
