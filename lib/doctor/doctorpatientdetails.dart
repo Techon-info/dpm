@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart' as models;
 
 class DoctorPatientDetails extends StatefulWidget {
   const DoctorPatientDetails({super.key});
@@ -26,9 +25,10 @@ class _DoctorPatientDetailsState extends State<DoctorPatientDetails> {
   }
 
   void _initializeAppwrite() {
-    _client = Client()
-      ..setEndpoint('https://cloud.appwrite.io/v1')
-      ..setProject('67ded3d9003dccc1a1e6');
+    _client =
+        Client()
+          ..setEndpoint('https://cloud.appwrite.io/v1')
+          ..setProject('67ded3d9003dccc1a1e6');
 
     _database = Databases(_client);
     _storage = Storage(_client);
@@ -42,12 +42,13 @@ class _DoctorPatientDetailsState extends State<DoctorPatientDetails> {
       );
 
       setState(() {
-        patients = result.documents.map((doc) {
-          return {
-            "id": doc.$id,
-            "name": doc.data['first_name'] ?? 'Unknown Name',
-          };
-        }).toList();
+        patients =
+            result.documents.map((doc) {
+              return {
+                "id": doc.$id,
+                "name": doc.data['first_name'] ?? 'Unknown Name',
+              };
+            }).toList();
         _isLoading = false;
       });
     } catch (e) {
@@ -61,8 +62,8 @@ class _DoctorPatientDetailsState extends State<DoctorPatientDetails> {
   void _navigateToPatientPage(BuildContext context, String name, String id) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) =>
-            PatientDetailsPage(patientName: name, patientId: id),
+        builder:
+            (context) => PatientDetailsPage(patientName: name, patientId: id),
       ),
     );
   }
@@ -74,25 +75,27 @@ class _DoctorPatientDetailsState extends State<DoctorPatientDetails> {
         title: const Text("Doctor's Dashboard"),
         backgroundColor: Colors.blue,
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage.isNotEmpty
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _errorMessage.isNotEmpty
               ? Center(child: Text(_errorMessage))
               : ListView.builder(
-                  itemCount: patients.length,
-                  itemBuilder: (context, index) {
-                    final patient = patients[index];
-                    return ListTile(
-                      title: Text(patient["name"]),
-                      subtitle: Text("ID: ${patient["id"]}"),
-                      onTap: () => _navigateToPatientPage(
-                        context,
-                        patient["name"],
-                        patient["id"],
-                      ),
-                    );
-                  },
-                ),
+                itemCount: patients.length,
+                itemBuilder: (context, index) {
+                  final patient = patients[index];
+                  return ListTile(
+                    title: Text(patient["name"]),
+                    subtitle: Text("ID: ${patient["id"]}"),
+                    onTap:
+                        () => _navigateToPatientPage(
+                          context,
+                          patient["name"],
+                          patient["id"],
+                        ),
+                  );
+                },
+              ),
     );
   }
 }
@@ -118,7 +121,8 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   String? latestImageUrl;
   bool _isLoading = true;
 
-  static const String bucketId = '67ded430003419eba777'; // ✅ Use correct bucket ID
+  static const String bucketId =
+      '67ded430003419eba777'; // ✅ Use correct bucket ID
 
   @override
   void initState() {
@@ -128,9 +132,10 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   }
 
   void _initializeAppwrite() {
-    _client = Client()
-      ..setEndpoint('https://cloud.appwrite.io/v1')
-      ..setProject('67ded3d9003dccc1a1e6');
+    _client =
+        Client()
+          ..setEndpoint('https://cloud.appwrite.io/v1')
+          ..setProject('67ded3d9003dccc1a1e6');
 
     _storage = Storage(_client);
   }
@@ -138,9 +143,10 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   Future<void> _fetchLatestImage() async {
     try {
       final result = await _storage.listFiles(bucketId: bucketId);
-      final filtered = result.files
-          .where((file) => file.name.startsWith(widget.patientId))
-          .toList();
+      final filtered =
+          result.files
+              .where((file) => file.name.startsWith(widget.patientId))
+              .toList();
 
       if (filtered.isNotEmpty) {
         filtered.sort((a, b) => b.$createdAt.compareTo(a.$createdAt));
@@ -189,8 +195,8 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
             _isLoading
                 ? const CircularProgressIndicator()
                 : latestImageUrl != null
-                    ? Image.network(latestImageUrl!)
-                    : const Text("No image uploaded"),
+                ? Image.network(latestImageUrl!)
+                : const Text("No image uploaded"),
           ],
         ),
       ),
